@@ -1,0 +1,67 @@
+core-php-auth/
+
+│
+├── assets/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── uploads/
+│
+├── config/
+│   ├── database.php
+│   ├── config.php
+│   └── session.php
+│
+├── helpers/
+│   ├── auth.php
+│   ├── csrf.php
+│   ├── validation.php
+│   ├── functions.php
+│   ├── upload.php
+│   └── mail.php
+│
+├── middleware/
+│   ├── authMiddleware.php
+│   ├── guestMiddleware.php
+│   └── adminMiddleware.php
+│
+├── includes/
+│   ├── header.php
+│   ├── footer.php
+│   ├── navbar.php
+│   └── sidebar.php
+│
+├── auth/
+│   ├── login.php
+│   ├── register.php
+│   ├── logout.php
+│   ├── forgot-password.php
+│   ├── reset-password.php
+│   ├── verify-email.php
+│   └── remember.php
+│
+├── dashboard/
+│   ├── dashboard.php
+│   ├── profile.php
+│   ├── edit-profile.php
+│   ├── change-password.php
+│   └── activity-log.php
+│
+├── admin/
+│   ├── dashboard.php
+│   ├── users.php
+│   ├── create-user.php
+│   ├── edit-user.php
+│   ├── delete-user.php
+│   └── login-history.php
+│
+├── api/
+│   ├── login.php
+│   ├── register.php
+│   └── profile.php
+│
+├── vendor/
+│
+├── database.sql
+│
+└── index.php
