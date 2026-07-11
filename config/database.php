@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS roles(
 CREATE TABLE IF NOT EXISTS password_resets(
     id bigint unsigned auto_increment primary key,
     user_id bigint unsigned not null,
-    token varchar(255) not null,
+    token varchar(255) not null, 
     expires_at timestamp not null,
     used_at timestamp null default null,
     created_at timestamp default CURRENT_TIMESTAMP,
