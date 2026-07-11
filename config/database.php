@@ -1,5 +1,9 @@
 <?php
-include __DIR__ . "/config.php";
+
+$conn = mysqli_connect("localhost", "root", "");
+if(!$conn){
+    die("Connection error " . mysqli_connect_error());
+}
 
 $create_database_sql = "CREATE DATABASE IF NOT EXISTS auth_core";
 $db_Created          = mysqli_query($conn, $create_database_sql);
