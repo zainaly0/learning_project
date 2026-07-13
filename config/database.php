@@ -1,9 +1,6 @@
 <?php
 
-$conn = mysqli_connect("localhost", "root", "");
-if(!$conn){
-    die("Connection error " . mysqli_connect_error());
-}
+include './config.php';
 
 $create_database_sql = "CREATE DATABASE IF NOT EXISTS auth_core";
 $db_Created          = mysqli_query($conn, $create_database_sql);
