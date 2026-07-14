@@ -5,6 +5,14 @@ if(!$conn){
     die("Connection error " . mysqli_connect_error());
 }
 
+$create_database_sql = "CREATE DATABASE IF NOT EXISTS auth_core";
+$db_Created          = mysqli_query($conn, $create_database_sql);
+if (! $db_Created) {
+    die("Database is not available " . mysqli_error($conn));
+}
+
+mysqli_select_db($conn, "auth_core");
+
 
 //  Application name
 define('APP_NAME', 'Core PHP Authentication');
@@ -13,7 +21,7 @@ define('APP_NAME', 'Core PHP Authentication');
 define('BASE_URL', 'http://localhost/codes/project/auth_core/');
 
 //  Timezone
-date_default_timezone_get('Asia/Kolkata');
+date_default_timezone_set('Asia/Kolkata');
 
 //  Upload Folder
 define('UPLOAD_PATH', __DIR__ . '/../assets/uploads/');

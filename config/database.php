@@ -2,14 +2,6 @@
 
 include './config.php';
 
-$create_database_sql = "CREATE DATABASE IF NOT EXISTS auth_core";
-$db_Created          = mysqli_query($conn, $create_database_sql);
-if (! $db_Created) {
-    die("Database is not available " . mysqli_error($conn));
-}
-
-mysqli_select_db($conn, "auth_core");
-
 $sql = "
 CREATE TABLE if NOT EXISTS users(
     id BIGINT UNSIGNED AUTO_INCREMENT primary key,
