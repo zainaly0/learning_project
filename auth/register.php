@@ -1,13 +1,22 @@
-<?php
-// include "../config/config.php";
-$configfile = __DIR__ . "/../config/config.php";
+<?php 
+// $configfile = __DIR__ . "/../config/config.php";
+// $functionsfile=  __DIR__ . "/../helpers/functions.php";
+require_once __DIR__ . "/../config/config.php";
+require_once __DIR__ . "/../helpers/functions.php";
 
-if (file_exists($configfile)) {
-    require_once __DIR__ . "/../config/config.php";
+// if (file_exists($configfile)) {
+//     require_once __DIR__ . "/../config/config.php";
 
-} else {
-    echo "config not found";
-}
+// } else {
+//     echo "config file not found";
+// }
+
+// if(file_exists($functionsfile)){
+//     require_once __DIR__ . "/../helpers/functions.php";
+// }else{
+//     echo "functions file not found";
+// }
+ 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -100,8 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $record_created = mysqli_query($conn, $sql_query);
 
             if ($record_created) {
-                header("Location: login.php");
-                exit;
+                redirect("auth/login.php");
             }
         } else {
             echo "image uploaded failed";
@@ -120,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registration</title>
 
 
     <style>
@@ -150,11 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
-        }
-
-        input {
-            height: 40px;
-            width: 24vw;
         }
 
         .input_group {
