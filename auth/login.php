@@ -2,6 +2,7 @@
 
     require_once __DIR__ . "/../config/config.php";
     require_once __DIR__ . "/../helpers/functions.php";
+    require_once __DIR__ . "/../config/session.php";
 
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $email    = trim($_POST['email'] ?? "");
