@@ -20,11 +20,11 @@ require_once __DIR__ . "/../helpers/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $password = trim($_POST['password']);
-    $status = trim($_POST['status']);
+    $name = trim($_POST['name'] ?? "");
+    $email = trim($_POST['email'] ?? "");
+    $phone = trim($_POST['phone'] ?? "");
+    $password = trim($_POST['password'] ?? "");
+    $status = trim($_POST['status'] ?? "");
 
     $errors = [];
 

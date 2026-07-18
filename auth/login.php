@@ -1,36 +1,49 @@
 <?php
 
-require_once __DIR__ . "/../config/config.php";
-require_once __DIR__ . "/../helpers/functions.php";
+    require_once __DIR__ . "/../config/config.php";
+    require_once __DIR__ . "/../helpers/functions.php";
 
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $email    = trim($_POST['email'] ?? "");
+    $password = trim($_POST['password'] ?? "");
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
- 
     $errors = [];
 
-    if(empty($email)){
+    if (empty($email)) {
         $errors['email'] = "Email is empty";
     }
-    if(empty($password)){
-        $
+    if (empty($password)) {
+        $errors['password'] = "Password is empty";
     }
 
+    if (! empty($errors)) {
 
-}
+    } elseif (empty($errors)) {
+        $db_query = "select * from users where email='$email' AND status=1";
+        $result   = mysqli_query($conn, $db_query);
 
+        if (! $result) {
+            die(mysqli_error($conn));
+        }
 
+        $resultarray = mysqli_fetch_assoc($result);
+        if (! $resultarray) {
+            echo "Email not found";
+            exit;
+        }
 
+        $passmatch = password_verify($password, $resultarray['password']);
+        if ($passmatch) {
+            echo "success to login";
+            exit;
+        } else {
+            echo "wrong password";
+            exit;
+        }
 
+    }
 
-
-
-
-
-
-
-
+    }
 
 ?>
 
@@ -72,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         .input_group{
             margin: 2px;
         }
-        label{ 
+        label{
             margin-bottom: 6px;
         }
 
@@ -142,16 +155,16 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             <h2>User Login</h2>
             <div class="input_group">
                 <label for="email">Email</label>
-                <input id="email" type="email" name="email" placeholder="Enter Email">
+                <input id="email" type="email" name="email" placeholder="Enter Email" value="<?php echo isset($email) ? htmlspecialchars($email) : ""; ?>">
                 <span style="color: red;">
-                    <?php echo ""; ?>
+                    <?php echo isset($errors['email']) ? $errors['email'] : ""; ?>
                 </span>
             </div>
             <div class="input_group">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" placeholder="Enter password">
+                <input id="password" type="password" name="password" placeholder="Enter password" >
                 <span style="color:red;">
-                    <?php echo ""; ?>
+                    <?php echo isset($errors['password']) ? $errors['password'] : ""; ?>
                 </span>
             </div>
             <div class="input_group options">
@@ -161,7 +174,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 </label>
                 <a href="forget-password.php">Forget Password? </a>
             </div>
-            
+
 
             <input type="submit" name="Submit" value="Submit">
 
