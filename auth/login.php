@@ -20,22 +20,34 @@
     if (! empty($errors)) {
 
     } elseif (empty($errors)) {
-        $db_query = "select * from users where email='$email' AND status=1";
+
+        $db_query = "select * from users where email='$email'";
         $result   = mysqli_query($conn, $db_query);
 
         if (! $result) {
             die(mysqli_error($conn));
         }
-
         $resultarray = mysqli_fetch_assoc($result);
+        
         if (! $resultarray) {
             echo "Email not found";
             exit;
         }
 
+        if($resultarray['status'] == null){
+            echo "User Is Disable";
+           redirect("/auth/login.php");
+        }
+
         $passmatch = password_verify($password, $resultarray['password']);
         if ($passmatch) {
-            echo "success to login";
+            session_regenerate_id(true);
+            
+            $_SESSION['user_id']  = $resultarray['id'];
+            $_SESSION['name'] = $resultarray['name'];
+            $_SESSION['email'] = $resultarray['email'];
+ 
+            redirect("/dashboard/dashboard.php");
             exit;
         } else {
             echo "wrong password";
