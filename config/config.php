@@ -1,13 +1,13 @@
 <?php
 
 $conn = mysqli_connect("localhost", "root", "");
-if(!$conn){
+if (!$conn) {
     die("Connection error " . mysqli_connect_error());
 }
 
 $create_database_sql = "CREATE DATABASE IF NOT EXISTS auth_core";
-$db_Created          = mysqli_query($conn, $create_database_sql);
-if (! $db_Created) {
+$db_Created = mysqli_query($conn, $create_database_sql);
+if (!$db_Created) {
     die("Database is not available " . mysqli_error($conn));
 }
 

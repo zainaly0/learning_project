@@ -1,11 +1,11 @@
 <?php
 
-    require_once __DIR__ . "/../config/config.php";
-    require_once __DIR__ . "/../helpers/functions.php";
-    require_once __DIR__ . "/../config/session.php";
+require_once __DIR__ . "/../config/config.php";
+require_once __DIR__ . "/../helpers/functions.php";
+require_once __DIR__ . "/../config/session.php";
 
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $email    = trim($_POST['email'] ?? "");
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $email = trim($_POST['email'] ?? "");
     $password = trim($_POST['password'] ?? "");
 
     $errors = [];
@@ -17,36 +17,38 @@
         $errors['password'] = "Password is empty";
     }
 
-    if (! empty($errors)) {
+    if (!empty($errors)) {
 
     } elseif (empty($errors)) {
 
         $db_query = "select * from users where email='$email'";
-        $result   = mysqli_query($conn, $db_query);
+        $result = mysqli_query($conn, $db_query);
 
-        if (! $result) {
+        if (!$result) {
             die(mysqli_error($conn));
         }
         $resultarray = mysqli_fetch_assoc($result);
-        
-        if (! $resultarray) {
+
+        if (!$resultarray) {
             echo "Email not found";
             exit;
         }
 
-        if($resultarray['status'] == null){
+        if ($resultarray['status'] == null) {
             echo "User Is Disable";
-           redirect("/auth/login.php");
+            redirect("/auth/login.php");
         }
 
         $passmatch = password_verify($password, $resultarray['password']);
         if ($passmatch) {
             session_regenerate_id(true);
-            
-            $_SESSION['user_id']  = $resultarray['id'];
+
+            $_SESSION['user_id'] = $resultarray['id'];
             $_SESSION['name'] = $resultarray['name'];
             $_SESSION['email'] = $resultarray['email'];
- 
+
+            echo "user is login";
+            exit;
             redirect("/dashboard/dashboard.php");
             exit;
         } else {
@@ -56,53 +58,56 @@
 
     }
 
-    }
+}
 
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login </title>
     <style>
-        body{
+        body {
             margin: 0;
             padding: 0;
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             background: linear-gradient(135deg, #4facfe, #00f2fe);
         }
-        .container{
+
+        .container {
             min-height: 100vh;
-            display:flex;
+            display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        h2{
+        h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #333;
         }
 
-        .main{
+        .main {
             width: 380px;
             background: #fff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
         }
 
-        .input_group{
+        .input_group {
             margin: 2px;
         }
-        label{
+
+        label {
             margin-bottom: 6px;
         }
 
-        input{
+        input {
             height: 42px;
             width: 100%;
             padding: 0 12px;
@@ -112,7 +117,7 @@
             font-size: 15px;
         }
 
-        input[type="submit"]{
+        input[type="submit"] {
             width: 100%;
             background: #007bff;
             color: white;
@@ -122,17 +127,18 @@
             transition: 0.3s;
         }
 
-        input[type="submit"]:hover{
+        input[type="submit"]:hover {
             background: #0056b3;
         }
-        .options{
+
+        .options {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 15px 0 20px;
         }
 
-        .remember{
+        .remember {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -141,59 +147,61 @@
             color: #555;
         }
 
-        .remember input[type="chekcbox"]{
+        .remember input[type="chekcbox"] {
             width: 16px;
             height: 16px;
             margin: 0;
             accent-color: #007bff;
         }
-        .options a{
+
+        .options a {
             text-decoration: none;
             color: #007bff;
             font-size: 14px;
         }
 
-        .options a:hover{
-    text-decoration:underline;
-}
-
-
+        .options a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="main">
-        <form action="" method="post">
-            <h2>User Login</h2>
-            <div class="input_group">
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email" placeholder="Enter Email" value="<?php echo isset($email) ? htmlspecialchars($email) : ""; ?>">
-                <span style="color: red;">
-                    <?php echo isset($errors['email']) ? $errors['email'] : ""; ?>
-                </span>
-            </div>
-            <div class="input_group">
-                <label for="password">Password</label>
-                <input id="password" type="password" name="password" placeholder="Enter password" >
-                <span style="color:red;">
-                    <?php echo isset($errors['password']) ? $errors['password'] : ""; ?>
-                </span>
-            </div>
-            <div class="input_group options">
-                <label class="remember">
-                    <input type="checkbox" name="remember" value="1">
-                    Remember Me
-                </label>
-                <a href="forget-password.php">Forget Password? </a>
-            </div>
+    <div class="container">
+        <div class="main">
+            <form action="" method="post">
+                <h2>User Login</h2>
+                <div class="input_group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" placeholder="Enter Email"
+                        value="<?php echo isset($email) ? htmlspecialchars($email) : ""; ?>">
+                    <span style="color: red;">
+                        <?php echo isset($errors['email']) ? $errors['email'] : ""; ?>
+                    </span>
+                </div>
+                <div class="input_group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter password">
+                    <span style="color:red;">
+                        <?php echo isset($errors['password']) ? $errors['password'] : ""; ?>
+                    </span>
+                </div>
+                <div class="input_group options">
+                    <label class="remember">
+                        <input type="checkbox" name="remember" value="1">
+                        Remember Me
+                    </label>
+                    <a href="forget-password.php">Forget Password? </a>
+                </div>
 
 
-            <input type="submit" name="Submit" value="Submit">
+                <input type="submit" name="Submit" value="Submit">
 
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
 </body>
+
 </html>

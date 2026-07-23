@@ -1,4 +1,4 @@
-<?php 
+<?php
 // $configfile = __DIR__ . "/../config/config.php";
 // $functionsfile=  __DIR__ . "/../helpers/functions.php";
 require_once __DIR__ . "/../config/config.php";
@@ -16,7 +16,7 @@ require_once __DIR__ . "/../helpers/functions.php";
 // }else{
 //     echo "functions file not found";
 // }
- 
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -260,7 +260,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <label for="status">Choose Status</label>
                     <select id="status" name="status">
                         <option value="" selected>Default</option>
-                        <option value="1" <?php echo (isset($status) && $status == 1) ? "selected" : ""; ?>>Active</option>
+                        <option value="1" <?php echo (isset($status) && $status == 1) ? "selected" : ""; ?>>Active
+                        </option>
                         <option value="0" <?php echo (isset($status) && $status == 0) ? "selected" : ""; ?>>Inactive
                         </option>
                     </select>

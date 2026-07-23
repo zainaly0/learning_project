@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS login_history(
 
 try {
 
-    if (! mysqli_multi_query($conn, $sql)) {
+    if (!mysqli_multi_query($conn, $sql)) {
         throw new Exception(mysqli_error($conn));
     }
 
