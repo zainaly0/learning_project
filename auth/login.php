@@ -47,6 +47,50 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION['name'] = $resultarray['name'];
             $_SESSION['email'] = $resultarray['email'];
 
+            echo "<pre>";
+            var_dump($_POST);
+
+            if (isset($_POST['remember'])) {
+                $bytes = random_bytes(32);
+                $token = bin2hex($bytes);
+                $ip_address = $_SERVER['REMOTE_ADDR'];
+                $user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+                // Device name
+                $device_name = "Unknown Device";
+                if (strpos($user_agent, 'Windows') !== false) {
+                    $device_name = "Windows PC";
+                } elseif (strpos($user_agent, 'Macintosh') !== false) {
+                    $device_name = "Mac";
+                } elseif (strpos($user_agent, 'Android') !== false) {
+                    $device_name = "Android";
+                } elseif (strpos($user_agent, 'iPhone') !== false) {
+                    $device_name = 'iPhone';
+                }
+
+                // device type 
+                $device_type = "";
+                if (preg_match("/Mobile|Android|iPhone/i", $user_agent)) {
+                    $device_type = "Mobile";
+                } elseif (preg_match("/iPad|Tablet/i", $user_agent)) {
+                    $device_type = "Tablet";
+                } else {
+                    $device_type = "Desktop";
+                }
+
+                $expires_at = date('Y-m-d H-i-s', strtotime("+30 days"));
+
+                var_dump($expires_at);
+                var_dump($_SERVER);
+                var_dump($device_name);
+
+
+
+
+                print_r($token);
+                echo "<br>";
+            }
+
             echo "user is login";
             exit;
             redirect("/dashboard/dashboard.php");
