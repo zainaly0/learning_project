@@ -65,3 +65,76 @@ core-php-auth/
 ├── database.sql
 │
 └── index.php
+
+
+
+
+
+
+✅ Database
+✅ Config
+✅ Register
+⬇
+1. Login
+2. Logout
+3. Dashboard
+4. Auth Middleware
+5. Profile
+6. Change Password
+7. Remember Me
+8. Forgot Password
+9. Reset Password
+10. Email Verification
+11. Login History
+12. Activity Logs
+13. Roles & Permissions
+14. Admin Panel
+
+
+
+Register
+auth/register.php
+
+User Insert
+      |
+      |
+Generate Verification Token
+      |
+      |
+Send Email
+      |
+      |
+verify-email.php
+
+
+
+
+forget password
+forgot-password.php
+
+Email Enter
+      |
+      |
+Generate Reset Token
+      |
+      |
+password_resets table
+      |
+      |
+Send Reset Link
+
+
+Database ✅
+Config ✅
+Register ✅
+
+Next:
+Login
+↓
+Logout
+↓
+Session
+↓
+Email Verification
+↓
+Forgot Password
