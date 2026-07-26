@@ -21,38 +21,45 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     } elseif (empty($errors)) {
 
-        $db_query = "select * from users where email='$email'";
-        $result = mysqli_query($conn, $db_query);
+        // $db_query = "select * from users where email='$email'";
+        // $result = mysqli_query($conn, $db_query);    //sql injection problem
 
-        if (!$result) {
-            die(mysqli_error($conn));
+        $stmt = mysqli_prepare($conn, "SELECT * from users WHERE email=?");
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result->num_rows == 0) {
+            $errors['Email'] = "creadential is not matched";
+            redirect("/auth/login.php");
+            exit;
         }
-        $resultarray = mysqli_fetch_assoc($result);
+        $user = mysqli_fetch_assoc($result);
 
-        if (!$resultarray) {
-            echo "Email not found";
+        if ($user['status'] == 0) {
+            $errors['status'] = "Your account is disabled.";
+            redirect("/auth/login.php");
             exit;
         }
 
-        if ($resultarray['status'] == null) {
-            echo "User Is Disable";
-            redirect("/auth/login.php");
+        if ($user['email_verified_at'] == null) {
+            $errors['email_verified_at'] = "Email not varified";
+            redirect('/auth/login.php');
+            exit;
         }
-
-        $passmatch = password_verify($password, $resultarray['password']);
+        $passmatch = password_verify($password, $user['password']);
         if ($passmatch) {
             session_regenerate_id(true);
 
-            $_SESSION['user_id'] = $resultarray['id'];
-            $_SESSION['name'] = $resultarray['name'];
-            $_SESSION['email'] = $resultarray['email'];
-
-            echo "<pre>";
-            var_dump($_POST);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['email'] = $user['email'];
 
             if (isset($_POST['remember'])) {
-                $bytes = random_bytes(32);
-                $token = bin2hex($bytes);
+                $user_id = $_SESSION['user_id'];
+                $plainToken = bin2hex(random_bytes(32));
+                $hashedtoken = hash('sha256', $plainToken);
                 $ip_address = $_SERVER['REMOTE_ADDR'];
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
@@ -78,26 +85,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     $device_type = "Desktop";
                 }
 
-                $expires_at = date('Y-m-d H-i-s', strtotime("+30 days"));
+                $expires_at = date('Y-m-d H:i:s', strtotime("+30 days"));
+                $last_used_at = date('Y-m-d H:i:s');
 
-                var_dump($expires_at);
-                var_dump($_SERVER);
-                var_dump($device_name);
+                $sql = "insert into remember_tokens(user_id, token, device_name, device_type, ip_address, user_agent, expires_at, last_used_at) values('$user_id', '$hashedtoken', '$device_name', '$device_type', '$ip_address', '$user_agent', '$expires_at', '$last_used_at')";
+
+                if (mysqli_query($conn, $sql)) {
+                    // setcookie(name,value,expires,path,domain,secure,httponly);
+                    setcookie('remember_token', $plainToken, time() + (60 * 60 * 24 * 30), "/", "", false, true);
+                }
 
 
-
-
-                print_r($token);
-                echo "<br>";
             }
-
-            echo "user is login";
-            exit;
             redirect("/dashboard/dashboard.php");
             exit;
         } else {
-            echo "wrong password";
-            exit;
+            $errors['credential']  = "wrong credential";
         }
 
     }
@@ -191,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             color: #555;
         }
 
-        .remember input[type="chekcbox"] {
+        .remember input[type="checkbox"] {
             width: 16px;
             height: 16px;
             margin: 0;
@@ -216,6 +219,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="main">
             <form action="" method="post">
                 <h2>User Login</h2>
+
+                <p><?php echo isset($errors['credential']) ? $errors['credential'] : ""; ?></p>
                 <div class="input_group">
                     <label for="email">Email</label>
                     <input id="email" type="email" name="email" placeholder="Enter Email"

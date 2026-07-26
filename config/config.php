@@ -30,5 +30,3 @@ define('UPLOAD_PATH', __DIR__ . '/../assets/uploads/');
 define('UPLOAD_URL', BASE_URL . 'assets/uploads/');
 
 //  Mail
-define('MAIL_FROM', 'zaidk4076@gmail.com');
-define('MAIL_FROM_NAME', APP_NAME);

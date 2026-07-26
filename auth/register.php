@@ -3,6 +3,7 @@
 // $functionsfile=  __DIR__ . "/../helpers/functions.php";
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../helpers/functions.php";
+require_once __DIR__ . "/../helpers/mail.php";
 
 // if (file_exists($configfile)) {
 //     require_once __DIR__ . "/../config/config.php";
@@ -109,6 +110,39 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $record_created = mysqli_query($conn, $sql_query);
 
             if ($record_created) {
+                $user_id = mysqli_insert_id($conn);
+                $token = bin2hex(random_bytes(32));
+                $hashed_emailverify_token = hash("sha256", $token);
+                $expires_at = date('Y-m-d, H:i:s', strtotime("+1 day"));
+
+                $email_verify_sql = "insert into email_verification(user_id, token, expires_at) values('$user_id', '$hashed_emailverify_token', '$expires_at')";
+
+                if (mysqli_query($conn, $email_verify_sql)) {
+                    $verifyemail_url = BASE_URL . 'auth/verify-email.php?token=' . $token;
+
+                    $to = isset($email) ? $email : $_POST['email'];
+                    $subject = "Email Verification";
+                    $body = '
+                <html> 
+                <body> 
+                        <h2>Email Verification</h2>
+                        <p>Thank You for registering.</p>
+                        <p>Please click the button below to verify your email</p>
+
+
+                        <a href=" ' . $verifyemail_url . ' " style="background: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                            Verify Email
+                        </a>
+
+                        <p>If the button doesnt work, copy the link</p>
+                        <p>'. $verifyemail_url.'</p>
+                </body>
+                </html>
+
+                    ';
+                    $email_result = sendMail($to, $subject, $body);
+
+                }
                 redirect("auth/login.php");
             }
         } else {
