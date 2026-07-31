@@ -75,20 +75,21 @@ core-php-auth/
 ✅ Config
 ✅ Register
 ⬇
-1. Login
+1. Login ✅
 2. Logout
-3. Dashboard
+3. Dashboard ✅
 4. Auth Middleware
 5. Profile
 6. Change Password
 7. Remember Me
 8. Forgot Password
 9. Reset Password
-10. Email Verification
+10. Email Verification ✅
 11. Login History
 12. Activity Logs
 13. Roles & Permissions
 14. Admin Panel
+14. Email setup ✅
 
 
 

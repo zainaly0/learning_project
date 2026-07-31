@@ -100,11 +100,48 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             redirect("/dashboard/dashboard.php");
             exit;
         } else {
-            $errors['credential']  = "wrong credential";
+            $errors['credential'] = "wrong credential";
         }
 
     }
 
+}
+
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
+    $token = $_COOKIE['remember_token'];
+    $hashtokencheck = hash('sha256', $token);
+
+    $stmt1 = $conn->prepare("select * from remember_tokens where token=?");
+    $stmt1->bind_param("s", $hashtokencheck);
+    $stmt1->execute();
+
+    $result = $stmt1->get_result();
+
+    // echo "<pre>";
+    // var_dump($result->num_rows > 0);
+    // exit;
+
+
+    if ($result->num_rows > 0) {
+        $data = mysqli_fetch_object($result);
+        $user_id = $data->user_id;
+        
+        $stmt2 = $conn->prepare("select * from users where id=?");
+        $stmt2->bind_param("i", $user_id);
+        $stmt2->execute();
+        
+        $result2 = $stmt2->get_result();
+        if ($result2->num_rows > 0) {
+            session_regenerate_id();
+            $userdata = mysqli_fetch_object($result2);
+            $_SESSION['user_id'] = $userdata->id;
+            $_SESSION['name'] = $userdata->name;
+            $_SESSION['email'] = $userdata->email;
+
+            redirect("/dashboard/dashboard.php");
+        }
+
+    }
 }
 
 ?>
