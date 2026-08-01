@@ -124,23 +124,25 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
 
     if ($result->num_rows > 0) {
         $data = mysqli_fetch_object($result);
-        $user_id = $data->user_id;
-        
-        $stmt2 = $conn->prepare("select * from users where id=?");
-        $stmt2->bind_param("i", $user_id);
-        $stmt2->execute();
-        
-        $result2 = $stmt2->get_result();
-        if ($result2->num_rows > 0) {
-            session_regenerate_id();
-            $userdata = mysqli_fetch_object($result2);
-            $_SESSION['user_id'] = $userdata->id;
-            $_SESSION['name'] = $userdata->name;
-            $_SESSION['email'] = $userdata->email;
 
-            redirect("/dashboard/dashboard.php");
+        if (strtotime($data->expires_at) > time()) {
+            $user_id = $data->user_id;
+
+            $stmt2 = $conn->prepare("select * from users where id=?");
+            $stmt2->bind_param("i", $user_id);
+            $stmt2->execute();
+
+            $result2 = $stmt2->get_result();
+            if ($result2->num_rows > 0) {
+                session_regenerate_id();
+                $userdata = mysqli_fetch_object($result2);
+                $_SESSION['user_id'] = $userdata->id;
+                $_SESSION['name'] = $userdata->name;
+                $_SESSION['email'] = $userdata->email;
+
+                redirect("/dashboard/dashboard.php");
+            }
         }
-
     }
 }
 
