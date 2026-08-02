@@ -223,7 +223,7 @@ if (!isset($_SESSION['user_id'])) {
 
                     <div class="dropdown">
                         <a href="#">Profile</a>
-                        <a href="#">Logout</a>
+                        <a href="../auth/logout.php">Logout</a>
                     </div>
                 </div>
             </header>

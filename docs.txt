@@ -76,7 +76,7 @@ core-php-auth/
 ✅ Register
 ⬇
 1. Login ✅
-2. Logout
+2. Logout✅
 3. Dashboard ✅
 4. Auth Middleware
 5. Profile
