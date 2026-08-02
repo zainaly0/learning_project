@@ -1,16 +1,6 @@
 <?php
-
-require_once __DIR__ . "/../config/session.php";
+require_once __DIR__ . "/../middleware/authMiddleware.php";
 require_once __DIR__ . "/../helpers/functions.php";
-
-if (!isset($_SESSION['user_id'])) {
-    redirect("/auth/login.php");
-}
-
-
-// echo "<PRE>";
-// var_dump($_SESSION);
-// echo $_SESSION['name'];
 
 ?>
 
@@ -207,8 +197,8 @@ if (!isset($_SESSION['user_id'])) {
             <h2>My Panel</h2>
 
             <ul>
-                <li> <a href="" class="link">Dashboard</a> </li>
-                <li> <a href="" class="link">Profile</a> </li>
+                <li> <a href='<?= url("/dashboard/dashboard.php"); ?>' class="link">Dashboard</a> </li>
+                <li> <a href='<?= url("/dashboard/profile.php") ?>' class="link">Profile</a> </li>
             </ul>
         </aside>
 
@@ -222,7 +212,7 @@ if (!isset($_SESSION['user_id'])) {
                     </button>
 
                     <div class="dropdown">
-                        <a href="#">Profile</a>
+                        <a href="<?=  url("/dashboard/profile.php");  ?>">Profile</a>
                         <a href="../auth/logout.php">Logout</a>
                     </div>
                 </div>
